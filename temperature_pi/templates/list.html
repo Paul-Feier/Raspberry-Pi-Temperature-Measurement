@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Readings List</title>
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}"/>
+    <style>
+        .scrollable-table {
+            display: block;
+            max-height: 300px; /* Adjust the height as needed */
+            overflow-y: scroll;
+			animation: fadeInUp 1s ease-in-out; 
+        }
+        .scrollable-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .scrollable-table th, .scrollable-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        .scrollable-table th {
+            background-color: #ff8c00; 
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Temperature Readings</h1>
+    </header>
+    <div class="container">
+        <div class="grid-container">
+            <div class="temperature-card">
+                <h2>Current Temperature</h2>
+                <p><strong>{{ '%.1f' % current_temperature }}°C</strong></p>
+            </div>
+            <div class="temperature-card">
+                <h2>Average Temperature for Today</h2>
+                <p><strong>{{ '%.1f' % average_temperature }}°C</strong></p>
+            </div>
+            <div class="temperature-card">
+                <h2>Minimum Temperature for Today</h2>
+                <p><strong>{{ '%.1f' % min_temperature }}°C</strong></p>
+            </div>
+            <div class="temperature-card">
+                <h2>Maximum Temperature for Today</h2>
+                <p><strong>{{ '%.1f' % max_temperature }}°C</strong></p>
+            </div>
+			<div class="temperature-card">
+                <h2>Minimum Temperature Last 7 Days</h2>
+                <p><strong>{{ '%.1f' % min_temp_past_week }}°C</strong></p>
+            </div>
+            <div class="temperature-card">
+                <h2>Maximum Temperature Last 7 Days</h2>
+                <p><strong>{{ '%.1f' % max_temp_past_week }}°C</strong></p>
+            </div>
+        </div>
+        <h1>Readings</h1>
+        <div class="scrollable-table">
+            <table border="1">
+                <tr>
+                    <th>ID</th>
+                    <th>Temperature</th>
+                    <th>Humidity</th>
+                    <th>Timestamp</th>
+                </tr>
+                {% for row in rows %}
+                <tr>
+                    <td><strong>{{ row['id'] }}</strong></td>
+                    <td><strong>{{ '%.1f' % row['temperature'] }}°C</strong></td>
+                    <td><strong>{{ '%.1f' % row['humidity'] }}%</strong></td>
+                    <td><strong>{{ row['timestamp'] }}</strong></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <h1>Temperature Evolution Over the Past Week ({{ week_number }})</h1>
+        <img src="{{ url_for('static', filename=plot_filename) }}" alt="Temperature Evolution">
+    </div>
+    <script>
+        setTimeout(function(){
+            window.location.reload(1);
+        }, 3600000); // 3600000 milliseconds = 1 hour
+    </script>
+</body>
+</html>
